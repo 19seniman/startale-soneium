@@ -1,0 +1,17 @@
+{
+  "name": "startale-soneium-swap",
+  "version": "2.0.0",
+  "description": "Swap ETH <-> USDSC on Soneium via Startale's own quote/route endpoint, using a private key from .env",
+  "type": "module",
+  "main": "swap.js",
+  "scripts": {
+    "swap": "node lim.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.2"
+  }
+}
