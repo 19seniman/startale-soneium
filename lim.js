@@ -1,3 +1,31 @@
+/**
+ * swap.js
+ * -----------------------------------------------------------------------
+ * Swap ETH <-> USDSC di Soneium, dengan meminta rute swap (calldata siap
+ * pakai) dari endpoint internal app.startale.com, lalu mengirim transaksi
+ * itu langsung dari wallet yang private key-nya dibaca dari .env.
+ *
+ * PENTING - BACA DULU:
+ * - STARTALE_QUOTE_URL di .env adalah endpoint internal yang ditemukan lewat
+ *   reverse-engineering trafik browser (Network tab), BUKAN API publik resmi
+ *   yang didokumentasikan Startale. Endpoint ini bisa berubah atau berhenti
+ *   berfungsi kapan saja tanpa pemberitahuan, terutama setelah mereka
+ *   mem-push update ke app.startale.com. Kalau itu terjadi, skrip ini akan
+ *   gagal dan perlu URL baru (lihat README.md).
+ * - Skrip ini mengirim transaksi ON-CHAIN SUNGGUHAN begitu kamu jalankan
+ *   perintah swap. Coba dengan jumlah kecil dulu.
+ * - .env berisi private key kamu dalam bentuk plaintext. Jangan pernah
+ *   commit atau share file itu.
+ *
+ * Pemakaian:
+ *   node swap.js balance
+ *   node swap.js quote eth-to-usdsc 0.001
+ *   node swap.js quote usdsc-to-eth 5
+ *   node swap.js eth-to-usdsc 0.001
+ *   node swap.js usdsc-to-eth 5
+ * -----------------------------------------------------------------------
+ */
+
 import "dotenv/config";
 import { ethers } from "ethers";
 import readline from "node:readline/promises";
