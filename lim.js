@@ -2,6 +2,7 @@ import "dotenv/config";
 import { ethers } from "ethers";
 import readline from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
+import { fetchQuoteViaBrowser } from "./browser-quote.mjs";
 
 const {
   PRIVATE_KEY,
@@ -105,20 +106,11 @@ function resolveNode(node) {
 
 async function fetchSwapRoute({ tokenIn, tokenOut, amountInWei }) {
   const payload = buildQuotePayload({ tokenIn, tokenOut, amountInWei });
-  const url = `${STARTALE_QUOTE_URL}?payload=${encodeURIComponent(payload)}`;
 
-  const res = await fetch(url, {
-    method: "GET",
-    headers: { Accept: "*/*" },
-  });
-
-  if (!res.ok) {
-    throw new Error(
-      `Gagal ambil rute dari Startale (HTTP ${res.status}). Endpoint mungkin sudah berubah - lihat README.md untuk cara menemukan URL baru.`
-    );
-  }
-
-  const raw = await res.json();
+  // Diambil lewat browser Chromium asli (Playwright), bukan fetch Node.js
+  // langsung, karena Node.js kena 403 dari proteksi Cloudflare/anti-bot
+  // meski header sudah ditiru persis seperti browser.
+  const raw = await fetchQuoteViaBrowser(STARTALE_QUOTE_URL, payload);
   const resolved = resolveNode(raw);
 
   if (!resolved || !resolved.result) {
